@@ -1,5 +1,7 @@
 const inquirer = require ('inquirer');
 const mysql = require('mysql');
+const route = require('./actionRoute');
+
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -12,6 +14,7 @@ const connection = mysql.createConnection({
   connection.connect((err) => {
     if (err) throw err;
     programInit();
+    connection.end();
   });
 
   const programInit = () => {
@@ -26,7 +29,7 @@ const connection = mysql.createConnection({
               switch (answer.action) {
                   case 'View':
                     console.log('View All');
-                    //viewAll();
+                    viewAll();
                     break;
                   
                   case 'Add':
@@ -42,4 +45,27 @@ const connection = mysql.createConnection({
           })
   }
 
-  
+  const viewAll = () => {
+      inquirer.prompt(
+          {
+              name: 'action',
+              type: 'list',
+              message: 'Select what would you like to view: ',
+              choices: ['View All Employee Details', 'View All Departments Only', 'View All Roles Only']
+          })
+          .then((answer) => {
+              switch (answer.action) {
+                  case 'View All Employee Details':
+                      route.viewEmpDetails();
+                      break;
+
+                   case 'View All Departments Only':
+                      route.viewDeptOnly();
+                      break;
+
+                   case 'View All Roles Only':
+                      route.viewRolesOnly();
+                      break;
+              }
+          })
+  }
