@@ -23,7 +23,7 @@ const connection = mysql.createConnection({
               name: 'action',
               type: 'list',
               message: 'Select action below: ',
-              choices: ['View', 'Add', 'Update'],
+              choices: ['View', 'Add', 'Update', 'Delete'],
           })
           .then((answer) => {
               switch (answer.action) {
@@ -34,13 +34,19 @@ const connection = mysql.createConnection({
                   
                   case 'Add':
                     console.log('Add All');
-                    //addAll();
+                    addAll();
                     break;
 
                   case 'Update':
                     console.log('Update All');
-                    //updateAll();
+                    updateAll();
                     break;    
+
+                //BONUS
+                  case 'Delete':
+                    console.log('Update All');
+                    deleteAll();
+                    break;
               }
           })
   }
@@ -50,8 +56,8 @@ const connection = mysql.createConnection({
           {
               name: 'action',
               type: 'list',
-              message: 'Select what would you like to view: ',
-              choices: ['View All Employee Details', 'View All Departments Only', 'View All Roles Only']
+              message: 'Select what you like to view: ',
+              choices: ['View All Employee Details', 'View All Departments Only', 'View All Roles Only', 'View Employees by Manager']
           })
           .then((answer) => {
               switch (answer.action) {
@@ -66,6 +72,64 @@ const connection = mysql.createConnection({
                    case 'View All Roles Only':
                       route.viewRolesOnly();
                       break;
+
+                    //BONUS
+                   case 'View Employees by Manager':
+                      viewEmpByMng();
+                      break;
+
+                    //View the total utilized budget of a department -- ie the combined salaries of all employees in that department **
               }
           })
   }
+
+  const addAll = () => {
+      inquirer.prompt(
+          {
+              name:'action',
+              type: 'list',
+              message: 'Select what you like to add: ',
+              choices: ['Add Department', 'Add Roles', 'Add Employee']
+          })
+          .then((answer) => {
+              switch (answer.action) {
+                case 'Add Department':
+                    addDeptarment();
+                    break;
+
+                  case 'Add Roles':
+                      addRoles();
+                      break;
+
+                  case 'Add Employee':
+                      addEmployee();
+                      break;
+
+              }
+          })
+  }
+
+const updateAll = () => {
+    inquirer.prompt (
+        {
+            name:'action',
+            type: 'list',
+            message: 'Select what you like to Update: ',
+            choices: ['Employee Personal Details', 'Employee Roles', 'Employee Manager']
+        })
+        .then((answer) => {
+            switch (answer.action) {
+                case 'Employee Personal Details':
+                    empDetails();
+                    break;
+
+                case 'Employee Roles':
+                    empRoles();
+                    break;
+                //BONUS
+                case 'Employee Manager':
+                    empManager();
+                    break;
+            }
+        })
+}
