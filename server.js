@@ -1,6 +1,9 @@
 const inquirer = require ('inquirer');
 const mysql = require('mysql');
-const route = require('./actionRoute');
+
+const { viewEmpDetails, viewDeptOnly, viewRolesOnly } = require('./view.js');
+const addRoute = require('./add.js');
+const updateRoute = require('./update.js');
 
 
 const connection = mysql.createConnection({
@@ -44,7 +47,7 @@ const connection = mysql.createConnection({
 
                 //BONUS
                   case 'Delete':
-                    console.log('Update All');
+                    console.log('Delete All');
                     deleteAll();
                     break;
               }
@@ -57,26 +60,30 @@ const connection = mysql.createConnection({
               name: 'action',
               type: 'list',
               message: 'Select what you like to view: ',
-              choices: ['View All Employee Details', 'View All Departments Only', 'View All Roles Only', 'View Employees by Manager']
+              choices: ['View All Employee Details', 'View All Departments Only', 'View All Roles Only', 'View Employees by Manager', 'Done Viewing']
           })
           .then((answer) => {
               switch (answer.action) {
                   case 'View All Employee Details':
-                      route.viewEmpDetails();
+                      viewEmpDetails();
                       break;
 
                    case 'View All Departments Only':
-                      route.viewDeptOnly();
+                      viewDeptOnly();
                       break;
 
                    case 'View All Roles Only':
-                      route.viewRolesOnly();
+                      viewRolesOnly();
                       break;
 
                     //BONUS
                    case 'View Employees by Manager':
                       viewEmpByMng();
                       break;
+
+                   case 'Done Viewing':
+                    programInit()
+                    break;
 
                     //View the total utilized budget of a department -- ie the combined salaries of all employees in that department **
               }
@@ -89,7 +96,7 @@ const connection = mysql.createConnection({
               name:'action',
               type: 'list',
               message: 'Select what you like to add: ',
-              choices: ['Add Department', 'Add Roles', 'Add Employee']
+              choices: ['Add Department', 'Add Roles', 'Add Employee', 'Done Adding']
           })
           .then((answer) => {
               switch (answer.action) {
@@ -104,7 +111,10 @@ const connection = mysql.createConnection({
                   case 'Add Employee':
                       addEmployee();
                       break;
-
+                  
+                  case 'Done Adding':
+                    programInit()
+                    break;
               }
           })
   }
@@ -115,7 +125,7 @@ const updateAll = () => {
             name:'action',
             type: 'list',
             message: 'Select what you like to Update: ',
-            choices: ['Employee Personal Details', 'Employee Roles', 'Employee Manager']
+            choices: ['Employee Personal Details', 'Employee Roles', 'Employee Manager', 'Done Updating']
         })
         .then((answer) => {
             switch (answer.action) {
@@ -129,6 +139,40 @@ const updateAll = () => {
                 //BONUS
                 case 'Employee Manager':
                     empManager();
+                    break;
+
+                case 'Done Updating':
+                    programInit();
+                    break;
+            }
+        })
+}
+
+//BONUS
+const deleteAll = () => {
+    inquirer.prompt (
+        {
+            name:'action',
+            type: 'list',
+            message: 'Select what you like to Delete: ',
+            choices: ['Delete Department', 'Delete Role', 'Delete Employee', 'Done Deleting']
+        })
+        .then((answer) => {
+            switch (answer.action) {
+                case 'Delete Department':
+                    empDetails();
+                    break;
+
+                case 'Delete Role':
+                    empRoles();
+                    break;
+        
+                case 'Delete Employee':
+                    empManager();
+                    break;
+
+                case 'Done Deleting':
+                    programInit();
                     break;
             }
         })

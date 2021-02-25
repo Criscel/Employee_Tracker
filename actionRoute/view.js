@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 
-const viewEmpDetails = () = {
+const viewEmpDetails = () => {
     connection.query('SELECT * FROM... ',
     function(err,res) {
         if (err) throw err;
@@ -10,7 +10,9 @@ const viewEmpDetails = () = {
     })
 }
 
-const viewDeptOnly = () = {
+exports.viewEmpDetails = viewEmpDetails;
+
+const viewDeptOnly = () => {
     connection.query('SELECT department_name FROM department_tbl',
     function(err,res) {
         if (err) throw err;
@@ -20,7 +22,9 @@ const viewDeptOnly = () = {
     })
 }
 
-const viewRolesOnly = () = {
+exports.viewDeptOnly = viewDeptOnly;
+
+const viewRolesOnly = () => {
     connection.query('SELECT role_title FROM role_tbl',
     function(err,res) {
         if (err) throw err;
@@ -29,3 +33,5 @@ const viewRolesOnly = () = {
         });
     })
 }
+
+exports.viewRolesOnly = viewRolesOnly;
