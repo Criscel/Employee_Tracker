@@ -1,10 +1,10 @@
 const inquirer = require ('inquirer');
 const mysql = require('mysql');
+const fs = require("fs");
 
-const { viewEmpDetails, viewDeptOnly, viewRolesOnly } = require('./view.js');
-const addRoute = require('./add.js');
-const updateRoute = require('./update.js');
-
+const { viewEmpDetails, viewDeptOnly, viewRolesOnly } = require('./actionRoute/view');
+//const addRoute = require('./add.js');
+//const updateRoute = require('./update.js');
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -18,7 +18,7 @@ const connection = mysql.createConnection({
     if (err) throw err;
     programInit();
     connection.end();
-  });
+  }); 
 
   const programInit = () => {
       inquirer.prompt(
@@ -78,7 +78,8 @@ const connection = mysql.createConnection({
 
                     //BONUS
                    case 'View Employees by Manager':
-                      viewEmpByMng();
+                      //viewEmpByMng();
+                      console.log('View Employees by Manager');
                       break;
 
                    case 'Done Viewing':
@@ -177,3 +178,5 @@ const deleteAll = () => {
             }
         })
 }
+
+module.exports = {programInit};

@@ -1,37 +1,50 @@
 const mysql = require('mysql');
+const fs = require("fs");
+
+//const { programInit } = require('./../server');
+
+const connection = mysql.createConnection({
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: 'yourRootPassword',
+    database: 'company_db',
+  });
+
 
 const viewEmpDetails = () => {
-    connection.query('SELECT * FROM... ',
+    connection.query('SELECT * FROM employee_tbl ',
     function(err,res) {
         if (err) throw err;
         res.forEach(result => {
-            console.table(`${result.ID}`, `${result.First_Name}`)       
+            //console.log(`ID: ${result.ID}`, ` || `, `First Name: ${result.first_name}`) 
+            console.table(res);      
         });
     })
-}
+   // programInit();
+};
 
-exports.viewEmpDetails = viewEmpDetails;
 
 const viewDeptOnly = () => {
-    connection.query('SELECT department_name FROM department_tbl',
+    connection.query('SELECT * FROM department_tbl',
     function(err,res) {
         if (err) throw err;
         res.forEach(result => {
-            console.table(`${result.ID}`, `${result.First_Name}`)       
+            console.table(res);       
         });
     })
-}
+};
 
-exports.viewDeptOnly = viewDeptOnly;
 
 const viewRolesOnly = () => {
-    connection.query('SELECT role_title FROM role_tbl',
+    connection.query('SELECT * FROM role_tbl',
     function(err,res) {
         if (err) throw err;
         res.forEach(result => {
-            console.table(`${result.title}`)       
+            console.table(res);       
         });
     })
-}
+};
 
-exports.viewRolesOnly = viewRolesOnly;
+//exports.viewRolesOnly = viewRolesOnly;
+module.exports = {viewEmpDetails, viewDeptOnly, viewRolesOnly};
