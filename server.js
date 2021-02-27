@@ -3,7 +3,9 @@ const mysql = require('mysql');
 const fs = require("fs");
 
 const { viewEmpDetails, viewDeptOnly, viewRolesOnly } = require('./actionRoute/view');
-//const addRoute = require('./add.js');
+
+const { addDepartment, addRoles, addEmployee } = require('./actionRoute/add');
+
 //const updateRoute = require('./update.js');
 
 const connection = mysql.createConnection({
@@ -102,7 +104,7 @@ const connection = mysql.createConnection({
           .then((answer) => {
               switch (answer.action) {
                 case 'Add Department':
-                    addDeptarment();
+                    addDepartment();
                     break;
 
                   case 'Add Roles':

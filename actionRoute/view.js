@@ -17,11 +17,12 @@ const viewEmpDetails = () => {
     function(err,res) {
         if (err) throw err;
         res.forEach(result => {
-            //console.log(`ID: ${result.ID}`, ` || `, `First Name: ${result.first_name}`) 
-            console.table(res);      
-        });
-    })
-   // programInit();
+            //console.table([
+                //{ID: `res.id`, First_Name: `res.first_name`}
+            console.table(res);
+            //programInit();
+        });  
+    });
 };
 
 
@@ -30,7 +31,8 @@ const viewDeptOnly = () => {
     function(err,res) {
         if (err) throw err;
         res.forEach(result => {
-            console.table(res);       
+            console.table(res);
+            //programInit();       
         });
     })
 };
@@ -41,10 +43,10 @@ const viewRolesOnly = () => {
     function(err,res) {
         if (err) throw err;
         res.forEach(result => {
-            console.table(res);       
+            console.table(res); 
+            //programInit();      
         });
     })
 };
 
-//exports.viewRolesOnly = viewRolesOnly;
 module.exports = {viewEmpDetails, viewDeptOnly, viewRolesOnly};
