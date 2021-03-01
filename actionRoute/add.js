@@ -1,11 +1,11 @@
 const inquirer = require ('inquirer');
 const mysql = require('mysql');
 const fs = require("fs");
-const { get } = require('http');
 
 const { programInit } = require('./../server');
 
 let department_options = [];
+let newDeptId;
 
 function getDepartments() {
     department_options = [];
@@ -77,18 +77,23 @@ const addRoles = (programInit) => {
                 message: 'Enter Salary for the new Role: '
             },    
             {
-                name:'newDeptId',
+                name:'newDept',
                 type: 'list',
                 message: 'Enter Department ID for the new Role: ',
                 choices: department_options
             }    
         ])
       .then((answer) => {
-      
-        //connection.query(`INSERT INTO role_tbl (ID, role_title, salary, department_id) VALUES ("${answer.newId}","${answer.newRoleTitle}","${answer.newSalary}","${answer.newDeptId}")`, 
-          //console.log(department_options);
-          //);
-          console.log(`${answer.newId}`,`${answer.newRoleTitle}`,`${answer.newSalary}`,`${answer.newDeptId}`);
+        connection.query(`SELECT ID FROM department_tbl WHERE department_name = "${answer.newDept}";`,
+        (err,res) => {
+            if (err) throw err;
+            newDeptId = res[0].ID;
+            //console.log(newDeptId);
+        
+        connection.query(`INSERT INTO role_tbl (ID, role_title, salary, department_id) VALUES ("${answer.newId}","${answer.newRoleTitle}","${answer.newSalary}","${newDeptId}")`,);
+
+          console.log(`${answer.newId}`,`${answer.newRoleTitle}`,`${answer.newSalary}`, newDeptId,`${answer.newDept}`);
+
           connection.query(`SELECT * FROM role_tbl`,
           function (err,res) {
               if (err) throw err;
@@ -97,6 +102,7 @@ const addRoles = (programInit) => {
               console.table(res);
               programInit();
           })
+        })
       });
     } 
 
