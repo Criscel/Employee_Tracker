@@ -1,10 +1,26 @@
 const inquirer = require ('inquirer');
 const mysql = require('mysql');
 const fs = require("fs");
-const promisemysql = require("promise-mysql");
-const { restoreDefaultPrompts } = require('inquirer');
+const { get } = require('http');
 
-//const { programInit } = require('./../server');
+const { programInit } = require('./../server');
+
+let department_options = [];
+
+function getDepartments() {
+    department_options = [];
+    connection.query(
+    `SELECT * FROM department_tbl;`, (err, res) => {
+    if(err) throw err;
+    // show result here
+    for (i = 0; i < res.length; i++){
+        let department = res[i].department_name;
+        department_options.push(department);
+    }
+    //console.log(department_options);
+    });
+    //return department_options;
+}
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -36,19 +52,14 @@ const addDepartment = () => {
             console.log(`${answer.newId}`, `${answer.newName}`);
             console.log('New Department Successfully Added!');
             console.table(res);
-            //programInit();
+            programInit();
         })
     });
 }
 
-const addRoles = () => {
-   const deptId = connection.query('SELECT * FROM department_tbl;', (err,res) => {
-        if (err) throw err;
-        //res.forEach(result => {
-        //    console.table(result. department_name)
-        //});
-    //})
-    //.then((answer) => {
+
+const addRoles = (programInit) => {
+    getDepartments();
         inquirer.prompt([
             {
                 name: 'newId',
@@ -69,33 +80,26 @@ const addRoles = () => {
                 name:'newDeptId',
                 type: 'list',
                 message: 'Enter Department ID for the new Role: ',
-                /*choice: (function deptID  ()  {
-                    connection.query('SELECT * FROM department_tbl;', (err,res) => {
-                        if (err) throw err;
-                        res.forEach(result => {
-                            console.table(result. department_name)
-                        });
-                     })
-                })*/
+                choices: department_options
             }    
         ])
       .then((answer) => {
       
         //connection.query(`INSERT INTO role_tbl (ID, role_title, salary, department_id) VALUES ("${answer.newId}","${answer.newRoleTitle}","${answer.newSalary}","${answer.newDeptId}")`, 
-          console.log(departmentName);
-          console.log(`${answer.newId}`,`${answer.newRoleTitle}`,`${answer.newSalary}`,`${answer.newDeptId}`);
+          //console.log(department_options);
           //);
+          console.log(`${answer.newId}`,`${answer.newRoleTitle}`,`${answer.newSalary}`,`${answer.newDeptId}`);
           connection.query(`SELECT * FROM role_tbl`,
           function (err,res) {
               if (err) throw err;
-              //console.log(`${answer.newId}`,`${answer.newRoleTitle}`,`${answer.newSalary}`,`${answer.newDeptId}`);
+
               console.log('New Role Successfully Added!');
               console.table(res);
-              //programInit();
+              programInit();
           })
       });
-    })  
-}
+    } 
+
 
 const addEmployee = () => {    
     inquirer.prompt([

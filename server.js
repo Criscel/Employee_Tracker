@@ -2,11 +2,12 @@ const inquirer = require ('inquirer');
 const mysql = require('mysql');
 const fs = require("fs");
 
-const { viewEmpDetails, viewDeptOnly, viewRolesOnly } = require('./actionRoute/view');
+const { viewEmpDetails, viewDeptOnly, viewRolesOnly, viewEmpByMng } = require('./actionRoute/view');
 
 const { addDepartment, addRoles, addEmployee } = require('./actionRoute/add');
 
-//const updateRoute = require('./update.js');
+const { empDetails, empRoles, empManager } = require('./actionRoute/update');
+const { exit } = require('process');
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -28,7 +29,7 @@ const connection = mysql.createConnection({
               name: 'action',
               type: 'list',
               message: 'Select action below: ',
-              choices: ['View', 'Add', 'Update', 'Delete'],
+              choices: ['View', 'Add', 'Update', 'Delete', 'Exit'],
           })
           .then((answer) => {
               switch (answer.action) {
@@ -52,8 +53,12 @@ const connection = mysql.createConnection({
                     console.log('Delete All');
                     deleteAll();
                     break;
+
+                  case 'Exit':
+                    connection.end();
+                    process.exit();
               }
-          })
+          });
   }
 
   const viewAll = () => {
@@ -67,20 +72,20 @@ const connection = mysql.createConnection({
           .then((answer) => {
               switch (answer.action) {
                   case 'View All Employee Details':
-                      viewEmpDetails();
+                      viewEmpDetails(programInit);
                       break;
 
                    case 'View All Departments Only':
-                      viewDeptOnly();
+                      viewDeptOnly(programInit);
                       break;
 
                    case 'View All Roles Only':
-                      viewRolesOnly();
+                      viewRolesOnly(programInit);
                       break;
 
                     //BONUS
                    case 'View Employees by Manager':
-                      //viewEmpByMng();
+                      viewEmpByMng(programInit);
                       console.log('View Employees by Manager');
                       break;
 
@@ -108,7 +113,7 @@ const connection = mysql.createConnection({
                     break;
 
                   case 'Add Roles':
-                      addRoles();
+                      addRoles(programInit);
                       break;
 
                   case 'Add Employee':
