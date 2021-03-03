@@ -86,7 +86,7 @@ const connection = mysql.createConnection({
                     //BONUS
                    case 'View Employees by Manager':
                       viewEmpByMng(programInit);
-                      console.log('View Employees by Manager');
+                      //console.log('View Employees by Manager');
                       break;
 
                    case 'Done Viewing':
@@ -109,7 +109,7 @@ const connection = mysql.createConnection({
           .then((answer) => {
               switch (answer.action) {
                 case 'Add Department':
-                    addDepartment();
+                    addDepartment(programInit);
                     break;
 
                   case 'Add Roles':
@@ -117,11 +117,11 @@ const connection = mysql.createConnection({
                       break;
 
                   case 'Add Employee':
-                      addEmployee();
+                      addEmployee(programInit);
                       break;
                   
                   case 'Done Adding':
-                    programInit()
+                    programInit(programInit)
                     break;
               }
           })
@@ -138,19 +138,19 @@ const updateAll = () => {
         .then((answer) => {
             switch (answer.action) {
                 case 'Employee Personal Details':
-                    empDetails();
+                    empDetails(programInit);
                     break;
 
                 case 'Employee Roles':
-                    empRoles();
+                    empRoles(programInit);
                     break;
                 //BONUS
                 case 'Employee Manager':
-                    empManager();
+                    empManager(programInit);
                     break;
 
                 case 'Done Updating':
-                    programInit();
+                    programInit(programInit);
                     break;
             }
         })
@@ -168,19 +168,19 @@ const deleteAll = () => {
         .then((answer) => {
             switch (answer.action) {
                 case 'Delete Department':
-                    empDetails();
+                    empDetails(programInit);
                     break;
 
                 case 'Delete Role':
-                    empRoles();
+                    empRoles(programInit);
                     break;
         
                 case 'Delete Employee':
-                    empManager();
+                    empManager(programInit);
                     break;
 
                 case 'Done Deleting':
-                    programInit();
+                    programInit(programInit);
                     break;
             }
         })

@@ -11,13 +11,13 @@ function getDepartments() {
     department_options = [];
     connection.query(
     `SELECT * FROM department_tbl;`, (err, res) => {
-    if(err) throw err;
+    if (err) throw err;
     // show result here
     for (i = 0; i < res.length; i++){
         let department = res[i].department_name;
         department_options.push(department);
     }
-    //console.log(department_options);
+    //console.log('top',department_options);
     });
     //return department_options;
 }
@@ -30,7 +30,7 @@ const connection = mysql.createConnection({
     database: 'company_db',
   });
 
-const addDepartment = () => {
+const addDepartment = (programInit) => {
     inquirer.prompt([
       {
 	name: 'newId',
@@ -107,31 +107,48 @@ const addRoles = (programInit) => {
     } 
 
 
-const addEmployee = () => {    
+const addEmployee = (programInit) => {    
     inquirer.prompt([
         {
             name: 'newId',
             type: 'input',
-            message: 'Enter ID number for the new Department: '
+            message: 'Enter ID number for the new Employee: '
         },
         {
-            name:'newName',
+            name:'firstName',
             type: 'input',
-            message: 'Enter Name for the new Department: '
-        }	
+            message: 'Enter First Name of the new Employee: '
+        },
+        {
+            name:'lastName',
+            type: 'input',
+            message: 'Enter Last Name of the new Employee: '
+        },	
+        {
+            name:'roleId',
+            type: 'input',
+            message: 'Enter Role ID of the new Employee: '
+        },	
+       /* {
+            name:'managerId',
+            type: 'input',
+            message: 'Enter Managers ID of the new Employee (press enter if null): '
+        },	*/
     ])
     .then((answer) => {
-        connection.query(`INSERT INTO department_tbl (ID, department_name) VALUES ("${answer.newId}","${answer.newName}")`, 
-        );
-        connection.query(`SELECT * FROM department_tbl`,
+        connection.query(`INSERT INTO employee_tbl (ID, first_name, last_name, role_id) VALUES ("${answer.newId}", "${answer.firstName}", "${answer.lastName}", "${answer.roleId}")`,);
+        
+        console.log(`${answer.newId}`, `${answer.firstName}`, `${answer.lastName}`, `${answer.roleId}`);
+
+        connection.query(`SELECT * FROM employee_tbl`,
         function (err,res) {
             if (err) throw err;
-            console.log(`${answer.newId}`, `${answer.newName}`);
-            console.log('New Department Successfully Added!');
+            console.log('New Employee Successfully Added!');
             console.table(res);
-            //programInit();
+            programInit();
         })
-    });
-    }
+    })
+};
+
 
 module.exports = {addDepartment, addRoles, addEmployee};
