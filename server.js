@@ -138,7 +138,7 @@ const updateAll = () => {
         .then((answer) => {
             switch (answer.action) {
                 case 'Employee Personal Details':
-                    empDetails(programInit);
+                    empDetails(updateAll);
                     break;
 
                 case 'Employee Roles':
@@ -186,4 +186,4 @@ const deleteAll = () => {
         })
 }
 
-module.exports = {programInit};
+module.exports = {programInit, updateAll};

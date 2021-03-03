@@ -2,7 +2,8 @@ const inquirer = require ('inquirer');
 const mysql = require('mysql');
 const fs = require("fs");
 
-const { programInit } = require('./../server');
+const { programInit, updateAll } = require('./../server');
+const { viewDeptOnly } = require('./view');
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -18,9 +19,25 @@ const empDetails = (programInit) => {
       name: "employeeDetails",
       type: "list",
       message: "Select Employee detail that needs to be updated: ",
-      choice: ['Last Name', 'First Name', 'Role', 'Manager']
+      choices: ['Last Name', 'First Name', 'Back'],
     }
   ])
+  .then((answer) => {
+    switch(answer.action) {
+      case 'Last name':
+        console.log('Last name update');
+      break;
+
+      case 'First name':
+        console.log('First name update');
+        break;
+
+      case 'Back':
+        console.log('Main Menu');
+        updateAll();
+        break;
+    }
+  });
 
 };
 
