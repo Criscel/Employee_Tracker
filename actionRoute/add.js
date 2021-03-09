@@ -92,7 +92,7 @@ const addRoles = (programInit) => {
         
         connection.query(`INSERT INTO role_tbl (ID, role_title, salary, department_id) VALUES ("${answer.newId}","${answer.newRoleTitle}","${answer.newSalary}","${newDeptId}")`,);
 
-          console.log(`${answer.newId}`,`${answer.newRoleTitle}`,`${answer.newSalary}`, newDeptId,`${answer.newDept}`);
+          //console.log(`${answer.newId}`,`${answer.newRoleTitle}`,`${answer.newSalary}`, newDeptId,`${answer.newDept}`);
 
           connection.query(`SELECT * FROM role_tbl`,
           function (err,res) {
@@ -138,7 +138,7 @@ const addEmployee = (programInit) => {
     .then((answer) => {
         connection.query(`INSERT INTO employee_tbl (ID, first_name, last_name, role_id) VALUES ("${answer.newId}", "${answer.firstName}", "${answer.lastName}", "${answer.roleId}")`,);
         
-        console.log(`${answer.newId}`, `${answer.firstName}`, `${answer.lastName}`, `${answer.roleId}`);
+        //console.log(`${answer.newId}`, `${answer.firstName}`, `${answer.lastName}`, `${answer.roleId}`);
 
         connection.query(`SELECT * FROM employee_tbl`,
         function (err,res) {
