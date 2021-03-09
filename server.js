@@ -7,6 +7,9 @@ const { viewEmpDetails, viewDeptOnly, viewRolesOnly, viewEmpByMng } = require('.
 const { addDepartment, addRoles, addEmployee } = require('./actionRoute/add');
 
 const { empDetails, empRoles, empManager } = require('./actionRoute/update');
+
+const { empDetails, empRoles, empManager } = require('./actionRoute/delete');
+
 const { exit } = require('process');
 
 const connection = mysql.createConnection({
@@ -138,7 +141,7 @@ const updateAll = () => {
         .then((answer) => {
             switch (answer.action) {
                 case 'Employee Personal Details':
-                    empDetails(updateAll);
+                    empDetails(programInit);
                     break;
 
                 case 'Employee Roles':
@@ -186,4 +189,4 @@ const deleteAll = () => {
         })
 }
 
-module.exports = {programInit, updateAll};
+module.exports = {programInit};

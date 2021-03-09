@@ -2,7 +2,7 @@ const inquirer = require('inquirer');
 const mysql = require('mysql');
 const fs = require("fs");
 
-const { programInit, updateAll } = require('./../server');
+const { programInit } = require('./../server');
 const { viewDeptOnly } = require('./view');
 
 const connection = mysql.createConnection({
@@ -24,21 +24,34 @@ const empDetails = (programInit) => {
   ])
     .then((answer) => {
       switch (answer.action) {
-        case 'Last name':
-          console.log('Last name update');
+        case 'Last Name':
+          lastName();
           break;
 
-        case 'First name':
+        case 'First Name':
           console.log('First name update');
           break;
 
         case 'Back':
           console.log('Main Menu');
-          updateAll();
+          programInit();
           break;
       }
     });
 
+};
+
+const lastName = () => {
+  inquirer.prompt([
+    {
+      name: "lastName",
+      type: "input",
+      message: "Enter Updated Employee Last Name: "
+    }
+  ])
+  .then((answer) => {
+    console.log(answer.lastname);
+  })
 };
 
 const empRoles = (programInit) => {
@@ -112,48 +125,47 @@ const empManager = (programInit) => {
     INNER JOIN employee_tbl m
     ON role_tbl.id = m.role_id
     AND role_tbl.role_title LIKE '%Manager%';`,
-        (err, res) => {
-            if (err) throw err;
-            for (i = 0; i < res.length; i++) {
-                let managers = (res[i].manager);
-                managerArr.push(managers);
-            }
-
-    inquirer.prompt([
-      {
-        name: "employee",
-        type: "list",
-        message: "Select which Employee you want to update: ",
-        choices: employeeArr
-      },
-      {
-        name: "manager",
-        type: "list",
-        message: "Select the Updated Managers below: (Please ADD MANAGER first if not available in selection)",
-        choices: managerArr
-      }
-    ])
-    .then((answer) => {
-      const query = `UPDATE employee_tbl 
-      SET manager_id = (SELECT role_id FROM (SELECT role_id FROM employee_tbl WHERE CONCAT(first_name, ' ' ,  last_name) LIKE '%${answer.manager}%') AS B )
-      WHERE CONCAT(first_name, ' ' ,  last_name) LIKE '%${answer.employee}%';`;
-      
-      connection.query(query, );
-
-      connection.query(`SELECT a.ID, a.first_name, a.last_name, a.manager_id, b.manager
-      FROM employee_tbl a
-      INNER JOIN (SELECT role_id, CONCAT  (first_name,  ' ' ,  last_name) AS manager FROM employee_tbl) b
-      WHERE a.manager_id = b.role_id;`, 
-      function  (err, res) {
+      (err, res) => {
         if (err) throw err;
-        console.log('Employee Manager Successfully Updated!');
-        console.table(res);
-        programInit();
-    })
-  })
-  })
-})
-    //console.log("BONUS, TBA")
-  };
+        for (i = 0; i < res.length; i++) {
+          let managers = (res[i].manager);
+          managerArr.push(managers);
+        }
 
-  module.exports = { empDetails, empRoles, empManager };
+        inquirer.prompt([
+          {
+            name: "employee",
+            type: "list",
+            message: "Select which Employee you want to update: ",
+            choices: employeeArr
+          },
+          {
+            name: "manager",
+            type: "list",
+            message: "Select the Updated Managers below: (Please ADD MANAGER first if not available in selection)",
+            choices: managerArr
+          }
+        ])
+          .then((answer) => {
+            const query = `UPDATE employee_tbl 
+            SET manager_id = (SELECT role_id FROM (SELECT role_id FROM employee_tbl WHERE CONCAT(first_name, ' ' ,  last_name) LIKE '%${answer.manager}%') AS B )
+            WHERE CONCAT(first_name, ' ' ,  last_name) LIKE '%${answer.employee}%';`;
+
+            connection.query(query,);
+
+            connection.query(`SELECT a.ID, a.first_name, a.last_name, a.manager_id, b.manager
+            FROM employee_tbl a
+            INNER JOIN (SELECT role_id, CONCAT  (first_name,  ' ' ,  last_name) AS manager FROM employee_tbl) b
+            WHERE a.manager_id = b.role_id;`,
+              function (err, res) {
+                if (err) throw err;
+                console.log('Employee Manager Successfully Updated!');
+                console.table(res);
+                programInit();
+              })
+          })
+      })
+  })
+};
+
+module.exports = { empDetails, empRoles, empManager };
