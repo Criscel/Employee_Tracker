@@ -79,7 +79,7 @@ const addRoles = (programInit) => {
             {
                 name:'newDept',
                 type: 'list',
-                message: 'Enter Department ID for the new Role: ',
+                message: 'Select Department for the new Role: ',
                 choices: department_options
             }    
         ])

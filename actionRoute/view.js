@@ -45,22 +45,11 @@ const viewRolesOnly = (programInit) => {
 };
 
 //BONUS
-/*
+
+
 const viewEmpByMng = (programInit) => {
-    connection.query('',
-    function(err,res) {
-        if (err) throw err;
-        res.forEach(result => {
-            console.table(res);
-            programInit(); 
-        });
-    })
-};*/
+    const managerArr = [];
 
-let managerArr = [];
-
-function getManagers() {
-    managerArr = [];
     connection.query(`SELECT m.id, CONCAT(m.first_name, ' ', m.last_name) AS manager
     FROM role_tbl 
     INNER JOIN employee_tbl m
@@ -73,14 +62,7 @@ function getManagers() {
         let managers = (res[i].manager);
         managerArr.push(managers);
         }
-        //console.log('top log:', managerArr);
-    });
-    return managerArr;
-}
 
-
-const viewEmpByMng = (programInit) => {
-    getManagers();
         inquirer.prompt([
             {
                 name: "manager",
@@ -117,6 +99,7 @@ const viewEmpByMng = (programInit) => {
             });*/
             programInit();
         });
+    });
     };
 
    module.exports = {viewEmpDetails, viewDeptOnly, viewRolesOnly, viewEmpByMng};

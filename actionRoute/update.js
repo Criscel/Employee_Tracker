@@ -41,13 +41,40 @@ const empDetails = (programInit) => {
 
 };
 
-const empRoles = () => {
+const empRoles = (programInit, employees) => {
+  const employeeArr = [];
 
+  connection.query(`SELECT id, CONCAT(first_name, ' ' ,  last_name) AS Employee FROM employee_tbl;`, (err, res) => {
+    if (err) throw err;
+    for (i = 0; i < res.length; i++){
+      let employee = res[i].Employee;
+      employeeArr.push(employee);
+    }
+
+  inquirer.prompt([
+    {
+      name: "employee",
+      type: "list",
+      message: "Select which Employee you want to update: ",
+      choices: employeeArr
+    },
+    {
+      name: 'UpdatedRole',
+      type: "input",
+      message: "Enter Employee's Updated Role: "
+    }
+  ])
+  .then((answer) => {
+    console.log(`${answer.employee}`, `${answer.UpdatedRole}`);
+    //connection.query(`UPDATE`)
+    programInit();
+  })
+});
 };
 
 //BONUS
 const empManager = () => {
-
+  console.log("BONUS, TBA")
 };
 
 module.exports = {empDetails, empRoles, empManager};
