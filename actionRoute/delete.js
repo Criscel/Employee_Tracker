@@ -27,7 +27,7 @@ const delDept = (programInit) => {
             {
                 name: 'delDepartment',
                 type: 'list',
-                message: 'Select Department that needs to be deleted: ',
+                message: 'Select Department that needs to be DELETED: ',
                 choices: department_options
             }
         ])
@@ -42,7 +42,38 @@ const delDept = (programInit) => {
             })
         })
     });
-}
+};
+
+const delRole = (programInit) => {
+    const roleArr = [];
+
+    connection.query(`SELECT * FROM role_tbl;`, (err, res) => {
+        if (err) throw err;
+        for (i = 0; i < res.length; i++) {
+          let roleName = res[i].role_title;
+          roleArr.push(roleName);
+        }
+
+        inquirer.prompt([
+            {
+                name: 'deleteRole',
+                type: "list",
+                message: "Select Role that needs to be DELETED: ",
+                choices: roleArr
+            }
+        ])
+        .then((answer) => {
+            connection.query(`DELETE FROM role_tbl where role_title = '${answer.deleteRole}';`,);
+
+            connection.query(`SELECT * FROM role_tbl;`, (err,res) => {
+                if (err) throw err;
+                console.log("Role Successfully Deleted!");
+                console.table(res);
+                programInit();
+            })
+        })
+    })
+};
 
 
 const delEmpDetails = (programInit) => {
@@ -80,4 +111,4 @@ const delEmpDetails = (programInit) => {
 
 
 
-module.exports = { delEmpDetails, delDept };
+module.exports = { delEmpDetails, delDept, delRole };

@@ -8,7 +8,7 @@ const { addDepartment, addRoles, addEmployee } = require('./actionRoute/add');
 
 const { empDetails, empRoles, empManager } = require('./actionRoute/update');
 
-const { delEmpDetails, delDept } = require('./actionRoute/delete');
+const { delEmpDetails, delDept, delRole } = require('./actionRoute/delete');
 
 const { exit } = require('process');
 
@@ -89,7 +89,6 @@ const connection = mysql.createConnection({
                     //BONUS
                    case 'View Employees by Manager':
                       viewEmpByMng(programInit);
-                      //console.log('View Employees by Manager');
                       break;
 
                    case 'Done Viewing':
@@ -172,12 +171,10 @@ const deleteAll = () => {
             switch (answer.action) {
                 case 'Delete Department':
                     delDept(programInit);
-                    //console.log("delete department")
                     break;
 
                 case 'Delete Role':
-                    //empRoles(programInit);
-                    console.log("delete role")
+                    delRole(programInit);
                     break;
         
                 case 'Delete Employee':
