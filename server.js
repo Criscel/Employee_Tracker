@@ -2,7 +2,7 @@ const inquirer = require ('inquirer');
 const mysql = require('mysql');
 const fs = require("fs");
 
-const { viewEmpDetails, viewDeptOnly, viewRolesOnly, viewEmpByMng } = require('./actionRoute/view');
+const { viewEmpDetails, viewDeptOnly, viewRolesOnly, viewEmpByMng, viewTotal } = require('./actionRoute/view');
 
 const { addDepartment, addRoles, addEmployee } = require('./actionRoute/add');
 
@@ -70,7 +70,7 @@ const connection = mysql.createConnection({
               name: 'action',
               type: 'list',
               message: 'Select what you like to view: ',
-              choices: ['View All Employee Details', 'View All Departments Only', 'View All Roles Only', 'View Employees by Manager', 'Done Viewing']
+              choices: ['View All Employee Details', 'View All Departments Only', 'View All Roles Only', 'View Employees by Manager', 'View Total Utilised Budget per Department', 'Done Viewing']
           })
           .then((answer) => {
               switch (answer.action) {
@@ -91,11 +91,14 @@ const connection = mysql.createConnection({
                       viewEmpByMng(programInit);
                       break;
 
+                    //View the total utilized budget of a department -- ie the combined salaries of all employees in that department **
+                    case 'View Total Utilised Budget per Department':
+                        viewTotal(programInit);
+                        break;
+
                    case 'Done Viewing':
                     programInit()
                     break;
-
-                    //View the total utilized budget of a department -- ie the combined salaries of all employees in that department **
               }
           })
   }

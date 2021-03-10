@@ -45,8 +45,6 @@ const viewRolesOnly = (programInit) => {
 };
 
 //BONUS
-
-
 const viewEmpByMng = (programInit) => {
     const managerArr = [];
 
@@ -88,4 +86,40 @@ const viewEmpByMng = (programInit) => {
         });
 };
 
-module.exports = { viewEmpDetails, viewDeptOnly, viewRolesOnly, viewEmpByMng };
+const viewTotal = (programInit) => {
+    const department_options = [];
+
+    connection.query(`SELECT * FROM department_tbl;`, (err, res) => {
+        if (err) throw err;
+        for (i = 0; i < res.length; i++){
+            let department = res[i].department_name;
+            department_options.push(department);
+        }
+
+        inquirer.prompt([
+            {
+                name: 'viewBudget',
+                type: 'list',
+                message: 'Select Department you want to view: ',
+                choices: department_options
+            }
+        ])
+        .then((answer) => {
+            connection.query(`SELECT b.department_name, a.department_id, SUM(a.salary) AS Utilised_Budget
+            FROM role_tbl as a
+            INNER JOIN department_tbl b
+            ON a.department_id = b.ID
+            WHERE a.department_id = (SELECT ID FROM department_tbl WHERE department_name LIKE '${answer.viewBudget}')
+            GROUP BY a.department_id;`, (err,res) => {
+                if (err) throw err;
+                console.log(`${answer.viewBudget}`);
+                console.table(res);
+                programInit();
+            })      
+        })
+    })
+    
+};
+
+
+module.exports = { viewEmpDetails, viewDeptOnly, viewRolesOnly, viewEmpByMng, viewTotal };
