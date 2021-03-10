@@ -11,4 +11,12 @@ After running the server.js, the user will be prompted with choices and can star
 I created a 4 linked .js file to make it easier to debug incase there will be an error.
 
 ## Usage
+[Employee_Tracker](https://github.com/Criscel/Employee_Tracker)
 
+[![Walkthrough Video](assets/view.gif)](https://youtu.be/V55xbLKMR7c)
+
+[![Walkthrough Video](assets/add.gif)](https://youtu.be/CIUHt9KEfTA)
+
+[![Walkthrough Video](assets/update.gif)](https://youtu.be/PAwLOF_KOVY)
+
+[![Walkthrough Video](assets/delete.gif)](https://youtu.be/xfZpi8eFUOA)
