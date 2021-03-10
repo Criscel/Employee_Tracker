@@ -13,44 +13,40 @@ const connection = mysql.createConnection({
   database: 'company_db',
 });
 
-const empDetails = (programInit) => {
-  inquirer.prompt([
-    {
-      name: "employeeDetails",
-      type: "list",
-      message: "Select Employee detail that needs to be updated: ",
-      choices: ['Last Name', 'First Name', 'Back'],
+const lastName = (programInit) => {
+  const employeeArr = [];
+
+  connection.query(`SELECT ID, CONCAT(first_name, ' ' ,  last_name) AS Employee FROM employee_tbl;`, (err, res) => {
+    if (err) throw err;
+    for (i = 0; i < res.length; i++) {
+      let employee = res[i].Employee;
+      employeeArr.push(employee);
     }
-  ])
-    .then((answer) => {
-      switch (answer.action) {
-        case 'Last Name':
-          lastName();
-          break;
 
-        case 'First Name':
-          console.log('First name update');
-          break;
-
-        case 'Back':
-          console.log('Main Menu');
-          programInit();
-          break;
+    inquirer.prompt([
+      {
+        name: 'updateLast',
+        type: 'list',
+        message: 'Select Employee that needs to be Updated: ',
+        choices: employeeArr
+      },
+      {
+        name: 'lastName',
+        type: 'input',
+        message: "Enter Updated Employee Last Name: "
       }
-    });
+    ])
+      .then((answer) => {
+        connection.query(`UPDATE employee_tbl SET last_name = '${answer.lastName}'
+    WHERE CONCAT(first_name, ' ' ,  last_name) LIKE '%${answer.updateLast}%';`);
 
-};
-
-const lastName = () => {
-  inquirer.prompt([
-    {
-      name: "lastName",
-      type: "input",
-      message: "Enter Updated Employee Last Name: "
-    }
-  ])
-  .then((answer) => {
-    console.log(answer.lastname);
+        connection.query(`SELECT ID, CONCAT(first_name, ' ' ,  last_name) AS Employee FROM employee_tbl;`, (err, res) => {
+          if (err) throw err;
+          console.log("Employee's Last Name Successfully Updated!")
+          console.table(res);
+          programInit();
+        })
+      })
   })
 };
 
@@ -168,4 +164,4 @@ const empManager = (programInit) => {
   })
 };
 
-module.exports = { empDetails, empRoles, empManager };
+module.exports = { lastName, empRoles, empManager };

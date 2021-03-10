@@ -6,7 +6,7 @@ const { viewEmpDetails, viewDeptOnly, viewRolesOnly, viewEmpByMng, viewTotal } =
 
 const { addDepartment, addRoles, addEmployee } = require('./actionRoute/add');
 
-const { empDetails, empRoles, empManager } = require('./actionRoute/update');
+const { lastName, empRoles, empManager } = require('./actionRoute/update');
 
 const { delEmpDetails, delDept, delRole } = require('./actionRoute/delete');
 
@@ -138,12 +138,12 @@ const updateAll = () => {
             name:'action',
             type: 'list',
             message: 'Select what you like to Update: ',
-            choices: ['Employee Personal Details', 'Employee Roles', 'Employee Manager', 'Done Updating']
+            choices: ['Employees Last Name', 'Employee Roles', 'Employee Manager', 'Done Updating']
         })
         .then((answer) => {
             switch (answer.action) {
-                case 'Employee Personal Details':
-                    empDetails(programInit);
+                case 'Employees Last Name':
+                    lastName(programInit);
                     break;
 
                 case 'Employee Roles':
