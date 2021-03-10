@@ -8,7 +8,7 @@ const { addDepartment, addRoles, addEmployee } = require('./actionRoute/add');
 
 const { empDetails, empRoles, empManager } = require('./actionRoute/update');
 
-const { empDetails, empRoles, empManager } = require('./actionRoute/delete');
+const { delEmpDetails, delDept } = require('./actionRoute/delete');
 
 const { exit } = require('process');
 
@@ -171,15 +171,17 @@ const deleteAll = () => {
         .then((answer) => {
             switch (answer.action) {
                 case 'Delete Department':
-                    empDetails(programInit);
+                    delDept(programInit);
+                    //console.log("delete department")
                     break;
 
                 case 'Delete Role':
-                    empRoles(programInit);
+                    //empRoles(programInit);
+                    console.log("delete role")
                     break;
         
                 case 'Delete Employee':
-                    empManager(programInit);
+                    delEmpDetails(programInit);
                     break;
 
                 case 'Done Deleting':

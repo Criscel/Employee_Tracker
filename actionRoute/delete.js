@@ -13,7 +13,39 @@ const connection = mysql.createConnection({
   database: 'company_db',
 });
 
-const empDetails = (programInit) => {
+const delDept = (programInit) => {
+    const department_options = [];
+
+    connection.query(`SELECT * FROM department_tbl;`, (err, res) => {
+        if (err) throw err;
+        for (i = 0; i < res.length; i++){
+            let department = res[i].department_name;
+            department_options.push(department);
+        }
+
+        inquirer.prompt([
+            {
+                name: 'delDepartment',
+                type: 'list',
+                message: 'Select Department that needs to be deleted: ',
+                choices: department_options
+            }
+        ])
+        .then((answer) => {
+            connection.query(`DELETE FROM department_tbl WHERE department_name = '${answer.delDepartment}';`,);
+
+            connection.query(`SELECT * FROM department_tbl;`, (err,res) => {
+                if (err) throw err;
+                console.log("Department Successfully Deleted!");
+                console.table(res);
+                programInit();
+            })
+        })
+    });
+}
+
+
+const delEmpDetails = (programInit) => {
     const employeeArr = [];
 
     connection.query(`SELECT ID, CONCAT(first_name, ' ' ,  last_name) AS Employee FROM employee_tbl;`, (err, res) => {
@@ -31,13 +63,21 @@ const empDetails = (programInit) => {
             }
           ])
           .then ((answer) => {
-              console.log(`${answer.employeeDetails}`);
+              connection.query(`DELETE FROM employee_tbl WHERE CONCAT(first_name, ' ' ,  last_name) LIKE '%${answer.employeeDetails}%';`,);
+
+                connection.query('SELECT * FROM employee_tbl;', (err, res) => {
+                    if (err) throw err;
+                    console.log("Employee Successfully Deleted! ")
+                    console.table(res);
+                    programInit();
+                })
           })
     });  
     
-}
+};
 
 
 
 
-module.exports = { empDetails, empRoles, empManager };
+
+module.exports = { delEmpDetails, delDept };
